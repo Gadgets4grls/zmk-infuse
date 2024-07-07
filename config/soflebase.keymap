@@ -1,0 +1,186 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+// Define layer numbers
+#define BASE 0
+#define BASE_QWERTY 1
+#define NAV_WORD 2
+#define NUM_WORD 3
+#define SYM_WORD 4
+#define NAV 5
+#define NUM 6
+#define SYM 7
+#define FUNC 8
+#define ADJUST 9
+#define LOWER 10
+#define MOUSE_KEYS 11
+#define MOUSE_TP 12
+#define MOUSE_TP_SET 13
+
+#ifdef HAS_UROB
+  #define HAS_TRI_STATE
+  #define HAS_NUM_WORD
+#endif
+
+// ZMK includes
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/rgb.h>
+#include <dt-bindings/zmk/ext_power.h>
+
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/ext_power.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/rgb.h>
+
+
+// Personal includes
+#include "includes/custom_keycodes.dtsi"
+#include "includes/settings.dtsi"
+//#include "includes/settings_pd.dtsi"
+#include "includes/conditional_layers.dtsi"
+#include "includes/macros.dtsi"
+#include "includes/combos.dtsi"
+#include "includes/behaviours_homerow_mods.dtsi"
+#include "includes/behaviours_mod_morph.dtsi"
+#include "includes/behaviours_other.dtsi"
+#include "includes/mouse_keys.dtsi"
+#include "includes/mouse_tp.dtsi"
+#include "includes/mouse_tp_badjeff_input_listener.dtsi"
+
+
+#ifdef HAS_MOUSE_TP
+  #define U_TOG_TP_SET &tog MOUSE_TP_SET
+#else
+  #define U_TOG_TP_SET &none
+#endif  // HAS_MOUSE_TP
+
+
+&led_strip {
+    chain-length = <35>;
+};
+
+&left_encoder {
+    resolution = <2>;
+};
+
+
+
+/ {
+    combos {
+        compatible = "zmk,combos";
+        combo_tl0 {
+            timeout-ms = <200>;
+            key-positions = <36 50>;
+            bindings = <&tog 1>;
+        };
+        combo_tl1 {
+            timeout-ms = <200>;
+            key-positions = <36 51>;
+            bindings = <&tog 2>;
+        };
+        combo_tl2 {
+            timeout-ms = <200>;
+            key-positions = <36 52>;
+            bindings = <&tog 3>;
+        };
+        combo_ml0 {
+            timeout-ms = <200>;
+            key-positions = <24 50>;
+            bindings = <&mo 1>;
+        };
+        combo_ml1 {
+            timeout-ms = <200>;
+            key-positions = <24 51>;
+            bindings = <&mo 2>;
+        };
+        combo_ml2 {
+            timeout-ms = <200>;
+            key-positions = <24 52>;
+            bindings = <&mo 3>;
+        };
+
+        combo_tlr0 {
+            timeout-ms = <200>;
+            key-positions = <49 59>;
+            bindings = <&tog 1>;
+        };
+        combo_tlr1 {
+            timeout-ms = <200>;
+            key-positions = <49 58>;
+            bindings = <&tog 2>;
+        };
+        combo_tlr2 {
+            timeout-ms = <200>;
+            key-positions = <49 57>;
+            bindings = <&tog 3>;
+        };
+        combo_mlr0 {
+            timeout-ms = <200>;
+            key-positions = <35 59>;
+            bindings = <&mo 1>;
+        };
+        combo_mlr1 {
+            timeout-ms = <200>;
+            key-positions = <35 58>;
+            bindings = <&mo 2>;
+        };
+        combo_mlr2 {
+            timeout-ms = <200>;
+            key-positions = <35 57>;
+            bindings = <&mo 3>;
+        };
+    };
+};
+
+/ {
+ behaviors {
+        gresc: grave_escape {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp ESC>, <&kp GRAVE>;
+            mods = <(MOD_LGUI|MOD_LSFT|MOD_RGUI|MOD_RSFT)>;
+                            };             
+  
+
+
+    
+           };
+};
+
+
+/ {
+
+  keymap {
+    compatible = "zmk,keymap";
+
+    Base_layer {
+      display-name = "Base";
+      bindings = <
+
+ 
+ //        `                 1                 2                 3                 4                 5                                                     6                 7                 8                 9                 0                bksp       
+        &gresc            &kp N1            &kp N2            &kp N3            &kp N4            &kp N5                                                &kp N6            &kp N7            &kp N8            &kp N9            &kp N0           &kp BSPC     
+//        Tab               Q                 W                 E                 R                 T                                                     Y                 U                 I                 O                 P                 -         
+        &kp TAB           &kp Q             &kp W             &kp E             &kp R             &kp T                                                 &kp Y             &kp U             &kp I             &kp O             &kp P           &kp MINUS     
+//      HYPER               A                 S                 D                 F                 G                                                     H                 J                 K                 L                 ;                 SQT       
+      &kp LHYP           &hm_shift_l LSHFT A &hm_l LCTRL S &hm_l LALT D      &hm_l LGUI F      &kp G                                                    &kp K            &hm_r RGUI J       &hm_r RALT K      &hm_r LCTRL L     &hm_shift_r SEMICOLON  &mt RHYP SQT    
+//      LSHIFT              Z                 X                 C                 V                 B               C_MUTE            RGB TOG             N                 M                 ,                 .                 /               RSHIFT      
+      &kp LSHFT           &kp Z             &kp X             &kp C             &kp V             &kp B           &kp C_MUTE      &rgb_ug RGB_TOG       &kp N             &kp M           &kp COMMA           &kp DOT          &kp FSLH         &kp RSHFT     
+//                                          LCTRL              LALT              LGUI             SPACE               RET             LAYER 2           LAYER 1            RGUI              RALT             RCTRL                                           
+                                          &kp LCTRL          &kp LALT          &kp LGUI         &kp SPACE           &kp RET           &mo 2            &mo 1            &kp RGUI          &kp RALT         &kp RCTRL                                         
+        >;        sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
+
+ 
+    };
+
+  }; 
+
+};
